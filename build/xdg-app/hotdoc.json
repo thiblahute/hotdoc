@@ -1,7 +1,7 @@
 {
     "app-id": "org.hotdoc.Hotdoc",
     "version": "master",
-    "runtime": "org.freedesktop.Platform",
+    "runtime": "org.freedesktop.Sdk",
     "runtime-version": "1.2",
     "finish-args": ["--command=hotdoc",
                     "--talk-name=ca.desrt.dconf",
@@ -43,21 +43,6 @@
             ]
         },
         {
-            "name": "setuptools",
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "https://pypi.python.org/packages/source/s/setuptools/setuptools-19.7.tar.gz",
-                    "sha256": "9e0783f3e6b736530a84980dce99fb0f01dafcd31b3f600cde2aa446f6f77cc0"
-                },
-                {
-                    "type": "file",
-                    "path": "setuptools-configure",
-                    "dest-filename": "configure"
-                }
-            ]
-        },
-        {
             "name": "hotdoc",
             "build-options" : {
               "build-args": ["--share=network"]
@@ -67,16 +52,6 @@
                     "type": "file",
                     "path": "hotdoc-configure",
                     "dest-filename": "configure"
-                }
-            ]
-        },
-        {
-            "name": "pkg-config",
-            "sources": [
-                {
-                    "type": "archive",
-                    "url": "http://pkgconfig.freedesktop.org/releases/pkg-config-0.29.tar.gz",
-                    "sha256": "c8507705d2a10c67f385d66ca2aae31e81770cc0734b4191eb8c489e864a006b"
                 }
             ]
         },
@@ -152,4 +127,3 @@
         }
     ]
 }
-
