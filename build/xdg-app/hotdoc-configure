@@ -1,0 +1,15 @@
+#!/bin/sh
+
+FLAGS="$@"
+
+cat <<EOF > Makefile
+all:
+	echo "Nothing"
+
+install:
+	pip2 install -v --install-option="--prefix=/app/" requests
+	pip2 install -v --install-option="--prefix=/app/" cffi
+	pip2 install -v --install-option="--prefix=/app/" setuptools-scm
+	pip2 install -v --install-option="--prefix=/app/" hotdoc
+
+EOF

@@ -1,0 +1,12 @@
+#!/bin/sh
+
+FLAGS="$@"
+
+cat <<EOF > Makefile
+all:
+	echo "Nothing"
+
+install:
+	python2 setup.py install --prefix=/app/
+
+EOF

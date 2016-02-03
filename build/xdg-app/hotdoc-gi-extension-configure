@@ -1,0 +1,23 @@
+#!/bin/sh
+
+FLAGS="$@"
+
+# https://github.com/alexlarsson/gnome-sdk-images/issues/14
+
+echo '#!/bin/sh' > /app/bin/xml2-config
+echo 'pkg-config libxml-2.0 $*' > /app/bin/xml2-config
+chmod +x  /app/bin/xml2-config
+
+echo '#!/bin/sh' > /app/bin/xslt-config
+echo 'pkg-config libxslt $*' > /app/bin/xslt-config
+chmod +x  /app/bin/xslt-config
+
+cat <<EOF > Makefile
+all:
+	echo "Nothing"
+
+install:
+	pip2 install lxml==3.5.0 --install-option="--prefix=/app/"
+	pip2 install hotdoc_gi_extension --install-option="--prefix=/app/"
+
+EOF

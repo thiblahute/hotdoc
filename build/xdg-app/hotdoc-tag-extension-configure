@@ -1,0 +1,12 @@
+#!/bin/sh
+
+FLAGS="$@"
+
+cat <<EOF > Makefile
+all:
+	echo "Nothing"
+
+install:
+	pip2 install hotdoc_tag_extension --install-option="--prefix=/app/"
+
+EOF

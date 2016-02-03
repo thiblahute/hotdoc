@@ -1,0 +1,155 @@
+{
+    "app-id": "org.hotdoc.Hotdoc",
+    "version": "master",
+    "runtime": "org.freedesktop.Platform",
+    "runtime-version": "1.2",
+    "finish-args": ["--command=hotdoc",
+                    "--talk-name=ca.desrt.dconf",
+                    "--filesystem=home"
+                    ],
+    "sdk": "org.freedesktop.Sdk",
+    "strip": false,
+    "build-options" : {
+        "cflags": "-O2 -g",
+        "cxxflags": "-O2 -g",
+        "env": {
+          "PYTHON": "python2"
+        }
+    },
+    "modules": [
+        {
+            "name": "libgit2",
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/libgit2/libgit2.git",
+                    "branch": "v0.23.4"
+                },
+                {
+                    "type": "file",
+                    "path": "libgit2-configure",
+                    "dest-filename": "configure"
+                }
+            ]
+        },
+        {
+            "name": "graphviz",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "http://graphviz.org/pub/graphviz/stable/SOURCES/graphviz-2.38.0.tar.gz",
+                    "sha256": "81aa238d9d4a010afa73a9d2a704fc3221c731e1e06577c2ab3496bdef67859e"
+                }
+            ]
+        },
+        {
+            "name": "setuptools",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://pypi.python.org/packages/source/s/setuptools/setuptools-19.7.tar.gz",
+                    "sha256": "9e0783f3e6b736530a84980dce99fb0f01dafcd31b3f600cde2aa446f6f77cc0"
+                },
+                {
+                    "type": "file",
+                    "path": "setuptools-configure",
+                    "dest-filename": "configure"
+                }
+            ]
+        },
+        {
+            "name": "hotdoc",
+            "build-options" : {
+              "build-args": ["--share=network"]
+            },
+            "sources": [
+                {
+                    "type": "file",
+                    "path": "hotdoc-configure",
+                    "dest-filename": "configure"
+                }
+            ]
+        },
+        {
+            "name": "pkg-config",
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "http://pkgconfig.freedesktop.org/releases/pkg-config-0.29.tar.gz",
+                    "sha256": "c8507705d2a10c67f385d66ca2aae31e81770cc0734b4191eb8c489e864a006b"
+                }
+            ]
+        },
+        {
+            "name": "hotdoc_c_extension",
+            "build-options" : {
+              "build-args": ["--share=network"]
+            },
+            "sources": [
+            {
+                "type": "git",
+                "url": "https://github.com/thiblahute/hotdoc_c_extension.git",
+                "branch": "xdgapp"
+            },
+            {
+                "type": "file",
+                "path": "hotdoc-c-extension-configure",
+                "dest-filename": "configure"
+            }
+            ]
+        },
+        {
+            "name": "hotdoc_gi_extension",
+            "build-options" : {
+              "build-args": ["--share=network"]
+            },
+            "sources": [
+                {
+                    "type": "file",
+                    "path": "hotdoc-gi-extension-configure",
+                    "dest-filename": "configure"
+                }
+            ]
+        },
+        {
+            "name": "hotdoc_search_extension",
+            "build-options" : {
+              "build-args": ["--share=network"]
+            },
+            "sources": [
+                {
+                    "type": "file",
+                    "path": "hotdoc-search-extension-configure",
+                    "dest-filename": "configure"
+                }
+            ]
+        },
+        {
+            "name": "hotdoc_tag_extension",
+            "build-options" : {
+              "build-args": ["--share=network"]
+            },
+            "sources": [
+                {
+                    "type": "file",
+                    "path": "hotdoc-tag-extension-configure",
+                    "dest-filename": "configure"
+                }
+            ]
+        },
+        {
+            "name": "hotdoc_python_extension",
+            "build-options" : {
+              "build-args": ["--share=network"]
+            },
+            "sources": [
+                {
+                    "type": "file",
+                    "path": "hotdoc-python-extension-configure",
+                    "dest-filename": "configure"
+                }
+            ]
+        }
+    ]
+}
+

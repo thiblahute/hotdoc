@@ -1,0 +1,15 @@
+#!/bin/sh
+
+FLAGS="$@"
+
+cat <<EOF > Makefile
+all:
+	echo "Nothing"
+
+install:
+	pip2 install nose --install-option="--prefix=/app/"
+	pip2 install pkgconfig==1.1.0 --install-option="--prefix=/app/"
+	pip2 install clang==3.7.dev234765 --install-option="--prefix=/app/"
+	python2 setup.py install --prefix=/app
+
+EOF

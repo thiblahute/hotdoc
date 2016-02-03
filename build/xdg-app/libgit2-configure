@@ -1,0 +1,14 @@
+#!/bin/bash
+
+FLAGS="$@"
+
+mkdir build
+
+cat <<EOF > Makefile
+all:
+	cd build/ && cmake .. -DCMAKE_INSTALL_PREFIX=/app/
+
+install:
+	cd build/ && cmake --build . --target install
+
+EOF
