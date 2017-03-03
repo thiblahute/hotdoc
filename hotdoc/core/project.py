@@ -206,9 +206,8 @@ class Project(Configurable):
             ext_folder = ext.formatter.get_output_folder()
             index_path = os.path.join(
                     self.sanitized_name,
-                    ext_folder,
+                    ext_folder if ext_folder else '',
                     self.tree.root.link.get_link(link_resolver))
-
             with open(os.path.join(output, 'html', 'index.html'), 'w',
                       encoding='utf8') as _:
                 _.write('<meta http-equiv="refresh" content="0; url=%s"/>' %
