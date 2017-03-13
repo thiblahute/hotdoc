@@ -1,4 +1,11 @@
-@require(code)
+@require(code, language)
+@if language:
+<pre><code class="language-@language">
+@else:
 <pre class="raw_code">
+@end
 @code
+@if language:
+</code>
+@end
 </pre>

@@ -514,3 +514,8 @@ class Extension(Configurable):
 
         return sorted_pages + sorted(
             to_sort, key=lambda p: pages[p].get_title().lower())
+
+    def get_language(self):
+        """Gets the current programming language being
+        rendered."""
+        return None

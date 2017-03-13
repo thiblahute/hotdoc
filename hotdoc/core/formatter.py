@@ -682,7 +682,8 @@ class Formatter(Configurable):
     def _format_raw_code(self, code):
         code = html.escape(code)
         template = self.engine.get_template('raw_code.html')
-        return template.render({'code': code})
+        return template.render({'code': code,
+                                'language': self.extension.get_language()})
 
     def _format_parameter_symbol(self, parameter):
         return (self.__format_parameter_detail(
