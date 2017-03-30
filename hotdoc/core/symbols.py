@@ -55,6 +55,7 @@ class Symbol(Base):
     link = Column(Link.as_mutable(PickleType))
     skip = Column(Boolean)
     project_name = Column(String)
+    parent_name = Column(String)
 
     __mapper_args__ = {
         'polymorphic_identity': 'symbol',
@@ -273,7 +274,6 @@ class FunctionSymbol(Symbol):
     id_ = Column(Integer, ForeignKey('symbols.id_'), primary_key=True)
     parameters = Column(MutableList.as_mutable(PickleType))
     return_value = Column(MutableList.as_mutable(PickleType))
-    is_method = Column(Boolean)
     is_constructor = Column(Boolean)
     is_ctor_for = Column(String)
     throws = Column(Boolean)
@@ -285,16 +285,20 @@ class FunctionSymbol(Symbol):
         self.parameters = []
         self.return_value = [None]
         self.throws = False
-        self.is_method = False
         Symbol.__init__(self, **kwargs)
 
     def get_children_symbols(self):
         return self.parameters + self.return_value
 
     def get_type_name(self):
-        if self.is_method:
-            return 'Method'
         return 'Function'
+
+class MethodSymbol(FunctionSymbol):
+    __mapper_args__ = {
+        'polymorphic_identity': 'methods',
+    }
+    def get_type_name(self):
+        return 'Method'
 
 
 class SignalSymbol(FunctionSymbol):
