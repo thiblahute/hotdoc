@@ -246,12 +246,12 @@ class Extension(Configurable):
         for key, val in kwargs.items():
             symbol.add_extension_attribute(self.extension_name, key, val)
 
-    def get_attr(self, symbol, attrname):
+    def get_attr(self, symbol, attrname, default=None):
         """
         Helper for getting symbol extension attributes
         """
         return symbol.extension_attributes.get(self.extension_name, {}).get(
-            attrname, None)
+            attrname, default)
 
     @staticmethod
     def add_arguments(parser):
