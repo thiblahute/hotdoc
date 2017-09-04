@@ -147,6 +147,8 @@ class Database(object):
         if aliases or not self.__incremental:
             return aliases
 
+        return []
+
     # pylint: disable=unused-argument
     def get_symbol(self, name, prefer_class=False):
         """
