@@ -69,14 +69,14 @@ class Symbol:
         attributes[key] = value
         self.extension_attributes[ext_name] = attributes
 
-    def get_extension_attribute(self, ext_name, key):
+    def get_extension_attribute(self, ext_name, key, default=None):
         """
         Banana banana
         """
         attributes = self.extension_attributes.get(ext_name)
         if not attributes:
-            return None
-        return attributes.get(key)
+            return default
+        return attributes.get(key, default)
 
     # pylint: disable=no-self-use
     def get_children_symbols(self):
@@ -154,14 +154,14 @@ class QualifiedSymbol:
         attributes[key] = value
         self.extension_attributes[ext_name] = attributes
 
-    def get_extension_attribute(self, ext_name, key):
+    def get_extension_attribute(self, ext_name, key, default=None):
         """
         Banana banana
         """
         attributes = self.extension_attributes.get(ext_name)
         if not attributes:
-            return None
-        return attributes.get(key)
+            return default
+        return attributes.get(key, default)
 
     # pylint: disable=no-self-use
     def get_children_symbols(self):
