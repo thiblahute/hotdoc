@@ -475,6 +475,7 @@ class ClassSymbol(StructSymbol):
 
     def __init__(self, **kwargs):
         self.hierarchy = []
+        self.interfaces = []
         self.children = {}
         StructSymbol.__init__(self, **kwargs)
 
@@ -482,7 +483,7 @@ class ClassSymbol(StructSymbol):
         return "Class"
 
     def get_children_symbols(self):
-        return self.hierarchy + list(
+        return self.hierarchy + self.interfaces + list(
             self.children.values()) + super().get_children_symbols()
 
 

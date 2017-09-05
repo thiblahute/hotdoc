@@ -846,8 +846,19 @@ class Formatter(Configurable):
                                          'klass': klass})
         return hierarchy
 
+    def _format_interfaces(self, klass, interfaces):
+        formated_interfaces = []
+        for _ in interfaces:
+            formated_interfaces.append(self._format_linked_symbol(_))
+        if formated_interfaces:
+            template = self.get_template("implemented_interfaces.html")
+            return template.render({'interfaces': formated_interfaces})
+
+        return ''
+
     def _format_class_symbol(self, klass):
         hierarchy = self._format_hierarchy(klass)
+        interfaces = self._format_interfaces(klass, klass.interfaces)
         template = self.get_template('class.html')
         raw_code = None
         if klass.raw_text is not None:
@@ -860,6 +871,7 @@ class Formatter(Configurable):
         return template.render({'symbol': klass,
                                 'klass': klass,
                                 'hierarchy': hierarchy,
+                                'interfaces': interfaces,
                                 'raw_code': raw_code,
                                 'members_list': members_list})
 

@@ -1,4 +1,4 @@
-@require(klass, hierarchy, raw_code, members_list)
+@require(klass, hierarchy, interfaces, raw_code, members_list)
 @extends('base_symbol.html')
 
 @def content():
@@ -6,6 +6,12 @@
 @if hierarchy:
 <div class="hierarchy_container">
 	@hierarchy
+</div>
+@end
+
+@if interfaces:
+<div class="interfaces_container">
+	@interfaces
 </div>
 @end
 
