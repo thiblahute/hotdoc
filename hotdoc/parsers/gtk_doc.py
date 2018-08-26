@@ -28,6 +28,8 @@ import cgi
 from collections import OrderedDict
 from itertools import zip_longest
 
+import yaml
+from yaml.constructor import ConstructorError
 
 from hotdoc.core.comment import (Comment, Annotation, Tag,
                                  comment_from_tag)
@@ -280,6 +282,8 @@ class GtkDocParser:
     # pylint: disable=too-many-arguments
     # pylint: disable=too-many-locals
     # pylint: disable=unused-argument
+    # pylint: disable=too-many-branches
+    # pylint: disable=too-many-statements
     def parse_comment(self, comment, filename, lineno, endlineno,
                       include_paths=None, stripped=False):
         """
@@ -336,12 +340,23 @@ class GtkDocParser:
 
         title = None
         short_description = None
+        meta = {}
         actual_parameters = OrderedDict({})
         for param in parameters:
             if param.name.lower() == 'short_description':
                 short_description = param
             elif param.name.lower() == 'title':
                 title = param
+            elif param.name.lower() == 'page_meta':
+                try:
+                    blocks = yaml.load_all(param.description.replace("\n ", "\n"))
+                    for block in blocks:
+                        if block:
+                            meta.update(block)
+                except ConstructorError as exception:
+                    warn('invalid-page-metadata',
+                         '%s: Invalid metadata: \n%s' % (filename,
+                                                         str(exception)))
             else:
                 actual_parameters[param.name] = param
 
@@ -354,7 +369,8 @@ class GtkDocParser:
                         annotations=annotations, params=actual_parameters,
                         description=description,
                         short_description=short_description,
-                        title=title, tags=tags, raw_comment=raw_comment)
+                        title=title, tags=tags, raw_comment=raw_comment,
+                        page_meta=meta)
         block.line_offset = description_offset
         block.col_offset = column_offset
 

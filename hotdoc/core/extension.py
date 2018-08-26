@@ -505,6 +505,12 @@ class Extension(Configurable):
         placeholder = '%s-index' % self.argument_prefix
         return tree.get_pages().get(placeholder)
 
+    def __get_comment_for_page(self, source_file, page_name):
+        source_abs = os.path.abspath(source_file)
+        if os.path.exists(source_abs):
+            return self.app.database.get_comment(source_abs)
+        return self.app.database.get_comment(page_name)
+
     def __add_subpage(self, tree, index, source_file, symbols):
         page_name = self.__get_rel_source_path(source_file)
         for path in OrderedSet([self.__package_root]) | self.source_roots:
@@ -514,26 +520,20 @@ class Extension(Configurable):
                 page_name = possible_name
                 break
 
-        needs_comment = False
         if not page:
+            comment = self.__get_comment_for_page(source_file, page_name)
             page = Page(page_name, None, os.path.dirname(page_name),
-                        tree.project.sanitized_name)
+                        tree.project.sanitized_name,
+                        comment.page_meta if comment else {})
             page.extension_name = self.extension_name
             page.generated = True
             tree.add_page(index, page_name, page)
-            needs_comment = True
+            page.comment = comment
         else:
             if not source_file.endswith(('.markdown', '.md')) and not \
                     page.comment:
-                needs_comment = True
+                page.comment = self.__get_comment_for_page(source_file, page_name)
             page.is_stale = True
-
-        if needs_comment:
-            source_abs = os.path.abspath(source_file)
-            if os.path.exists(source_abs):
-                page.comment = self.app.database.get_comment(source_abs)
-            else:
-                page.comment = self.app.database.get_comment(page_name)
 
         page.symbol_names |= symbols
 

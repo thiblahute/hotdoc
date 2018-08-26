@@ -25,7 +25,7 @@ from collections import defaultdict
 
 
 # pylint: disable=too-few-public-methods
-class TagValidator(object):
+class TagValidator:
     """
     Tag validators may be created by extensions that wish
     to add custom tags. (Returns, Since, etc...)
@@ -41,7 +41,7 @@ class TagValidator(object):
         raise NotImplementedError
 
 
-class Comment(object):
+class Comment:
     """
     Represents a piece of markup text, optionally tied to a particular symbol.
     Code-parsing extensions should add instances of this class to
@@ -70,7 +70,7 @@ class Comment(object):
     def __init__(self, name=u'', title=None, params=None, filename=u'',
                  lineno=-1, endlineno=-1, annotations=None,
                  description=u'', short_description=None, tags=None,
-                 raw_comment=u'', topics=None):
+                 raw_comment=u'', topics=None, page_meta=None):
         self.name = name
         self.title = title
         self.params = params or {}
@@ -89,6 +89,7 @@ class Comment(object):
         self.short_description = short_description
         self.extension_attrs = defaultdict(lambda: defaultdict(dict))
         self.tags = tags or {}
+        self.page_meta = page_meta or {}
         self.raw_comment = raw_comment
 
     def __getstate__(self):
@@ -103,7 +104,7 @@ class Comment(object):
         self.extension_attrs = defaultdict(lambda: defaultdict(dict))
 
 
-class Annotation(object):
+class Annotation:
     """
     An annotation is extra information that may or may not be displayed
     to the end-user, depending on the context.
@@ -115,7 +116,7 @@ class Annotation(object):
         self.argument = argument
 
 
-class Tag(object):
+class Tag:
     """
     A tag is extra information that shall always be displayed
     to the end-user, independent of the context.
