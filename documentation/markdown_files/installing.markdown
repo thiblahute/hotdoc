@@ -44,6 +44,15 @@ And on ubuntu / debian:
 apt-get install python3-dev libxml2-dev libxslt1-dev cmake libyaml-dev libclang-dev llvm-dev libglib2.0-dev libjson-glib-dev flex
 ```
 
+On mac OS with brew:
+
+```
+brew install python3 llvm glib json-glib flex pkg-config libxml2 cmake bison
+# Fix with the right version of libxml
+echo 'export PKG_CONFIG_PATH="/usr/local/opt/libffi/lib/pkgconfig:/usr/local/Cellar/libxml2/2.9.9_2/lib/pkgconfig/"' >> ~/.bash_profile
+echo 'export PATH="/usr/local/opt/bison/bin:$PATH"' >> ~/.bash_profile
+```
+
 We'll be happy to merge updates to this list if you have successfully built hotdoc on another platform.
 
 ## Creating a virtualenv
