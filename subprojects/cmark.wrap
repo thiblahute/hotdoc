@@ -1,0 +1,4 @@
+[wrap-git]
+directory=cmark
+url=https://github.com/thiblahute/cmark.git
+revision=mesonify

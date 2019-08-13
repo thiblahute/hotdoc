@@ -1,0 +1,4 @@
+option('python',
+        type: 'string',
+        value: 'python3',
+        description: 'The python installation to use, see http://mesonbuild.com/Python-module.html#find_installation for more details')
