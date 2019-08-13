@@ -4,15 +4,17 @@ short-description: Detailed instructions for installing hotdoc
 
 # Installing
 
+If there is a wheel for your platform (currently only on linux) you can simply do:
+
+    python3 -m pip install hotdoc
+
+# From source
+
 ## System-wide dependencies
 
 ### lxml
 
 Hotdoc uses lxml, which depends on libxml2 and libxslt.
-
-### cmake
-
-For now, hotdoc bundles its own version of [libcmark](https://github.com/jgm/cmark) as a submodule, and builds it using cmake, which thus needs to be installed on the system.
 
 ### pyyaml
 
@@ -30,18 +32,22 @@ Clang and llvm-config are runtime dependencies for the C extension.
 
 The search extension is implemented in C, and index creation depends on [glib](https://developer.gnome.org/glib/) and [json-glib](https://developer.gnome.org/json-glib/).
 
+### npm
+
+The default theme requires `npm` to be built.
+
 ### Command-line install
 
 On Fedora you can install all these dependencies with:
 
 ```
-dnf install python3-devel libxml2-devel libxslt-devel cmake libyaml-devel clang-devel llvm-devel glib2-devel json-glib-devel flex
+dnf install python3-devel libxml2-devel libxslt-devel cmake libyaml-devel clang-devel llvm-devel glib2-devel json-glib-devel flex npm
 ```
 
 And on ubuntu / debian:
 
 ```
-apt-get install python3-dev libxml2-dev libxslt1-dev cmake libyaml-dev libclang-dev llvm-dev libglib2.0-dev libjson-glib-dev flex
+apt-get install python3-dev libxml2-dev libxslt1-dev cmake libyaml-dev libclang-dev llvm-dev libglib2.0-dev libjson-glib-dev flex nodejs
 ```
 
 We'll be happy to merge updates to this list if you have successfully built hotdoc on another platform.
@@ -61,35 +67,22 @@ python3 -m venv hotdoc_env
 
 You are now in a virtual environment, to exit it you may call `deactivate`, to enter it again simply call `. hotdoc_env/bin/activate` from the directory in which the environment was created.
 
-## Hotdoc itself
+## Build in development mode
 
-### Build options
+```
+meson build/ -Dprefix=$(python3 -c "import sys; print(sys.prefix)") -Dlibdir=lib
+ninja -C build develop
+```
 
-To ensure that extensions with optional dependencies are enabled when installing hotdoc, the setup script will look at the following environment variables:
+## Build options
 
-- `HOTDOC_BUILD_C_EXTENSION`: one of `enabled`, `disabled` or `auto`. Default is `auto`
+See options running:
 
-This awkward way of passing options is due to setuptools' limitations.
+    meson configure
 
-### Install methods
+To pass extra meson options when building with pip, you should set the `MESON_ARGS` environment variable,
+like:
 
-Three main alternatives are available:
+  MESON_ARGS="-Dc-extension=enabled` pip install .
 
-* Using pip to get the last released version of hotdoc:
-  ```
-  python3 -m pip install hotdoc
-  ```
-
-* Installing a "read-only" version from a github clone:
-  ```
-  git clone https://github.com/hotdoc/hotdoc.git
-  cd hotdoc
-  python3 setup.py install
-  ```
-
-* Installing an editable version from a github clone:
-  ```
-  git clone https://github.com/hotdoc/hotdoc.git
-  cd hotdoc
-  python3 -m pip install -e .[dev]
-  ```
+This awkward way of passing options is due to current limitation in pip pep517 implementation.

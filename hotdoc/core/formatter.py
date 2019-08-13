@@ -1055,6 +1055,8 @@ class Formatter(Configurable):
             if html_theme == 'default':
                 default_theme = os.path.join(HERE, os.pardir,
                                              'hotdoc_bootstrap_theme', 'dist')
+                if not os.path.exists(default_theme):
+                    default_theme = os.path.join(HERE, os.pardir, 'hotdoc_bootstrap_theme')
 
                 html_theme = os.path.abspath(default_theme)
                 debug("Using default theme")
