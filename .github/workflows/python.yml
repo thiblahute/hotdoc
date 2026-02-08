@@ -16,20 +16,22 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.7, 3.8, 3.11]
+        python-version: ['3.10', '3.11', '3.12', '3.13']
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v5
+      with:
+        submodules: true
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
+        cache: 'pip'
     - name: Install Apt Dependencies
       run: sudo apt install -y libxml2-dev libglib2.0-dev libjson-glib-dev
     - name: Build
       run: |
-        python -m pip install --upgrade pip
-        pip install wheel
-        pip install --editable .
+        python -m pip install --upgrade pip meson-python ninja wheel setuptools
+        pip install --no-build-isolation --editable . -Cbuild-dir=build-dir
     - name: Test
-      run: python3 -m unittest
+      run: TEST_BASE_THEME_DIR=$(pwd)/build-dir/subprojects/hotdoc_bootstrap_theme/src python3 -m unittest

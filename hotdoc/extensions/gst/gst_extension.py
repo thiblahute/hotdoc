@@ -35,7 +35,8 @@ from hotdoc.utils.loggable import info, error
 from hotdoc.utils.utils import OrderedSet
 from hotdoc.core.extension import Extension
 from hotdoc.core.symbols import ClassSymbol, QualifiedSymbol, PropertySymbol, \
-    SignalSymbol, ActionSignalSymbol, ReturnItemSymbol, ParameterSymbol, Symbol, InterfaceSymbol
+    SignalSymbol, ActionSignalSymbol, ReturnItemSymbol, ParameterSymbol, Symbol, \
+    InterfaceSymbol, EnumMemberSymbol, EnumSymbol
 from hotdoc.parsers.gtk_doc import GtkDocParser, gather_links, search_online_links
 from hotdoc.extensions.c.utils import CCommentExtractor
 from hotdoc.core.formatter import Formatter
@@ -43,7 +44,6 @@ from hotdoc.core.comment import Comment
 from hotdoc.extensions.gi.gi_extension import WritableFlag, ReadableFlag, \
     ConstructFlag, ConstructOnlyFlag
 from hotdoc.extensions.gi.symbols import GIClassSymbol, GIInterfaceSymbol
-from hotdoc.extensions.devhelp.devhelp_extension import TYPE_MAP
 
 
 DESCRIPTION =\
@@ -234,9 +234,8 @@ class GstPluginSymbol(Symbol):
         return ""
 
 
-class GstNamedConstantValue(Symbol):
+class GstNamedConstantValue(EnumMemberSymbol):
     __tablename__ = 'named constants value'
-    standalone = False
     TEMPLATE = """
         @require(symbol)
         <div class="member_details" class="always-hide-toc" data-toc-skip=true data-hotdoc-id="@symbol.link.id_">
@@ -245,20 +244,11 @@ class GstNamedConstantValue(Symbol):
     """
 
 
-class GstNamedConstantsSymbols(Symbol):
+class GstNamedConstantsSymbols(EnumSymbol):
     __tablename__ = 'named constants'
 
     def __init__(self, **kwargs):
-        self.members = {}
-        self.raw_text = ''
-        self.anonymous = False
-        Symbol.__init__(self, **kwargs)
-
-    def get_children_symbols(self):
-        return self.members + super().get_children_symbols()
-
-    def get_extra_links(self):
-        return [m.link for m in self.members]
+        EnumSymbol.__init__(self, **kwargs)
 
     def get_type_name(self):
         return "Name constant"
@@ -1149,6 +1139,4 @@ class GstExtension(Extension):
         link_resolver.get_link_signal.disconnect(
             search_online_links)
 
-
-TYPE_MAP.update({GstElementSymbol: 'class', GstNamedConstantsSymbols: 'enum'})
 _inject_fundamentals()

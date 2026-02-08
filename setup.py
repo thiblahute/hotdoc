@@ -23,7 +23,6 @@ Setup file for hotdoc.
 import os
 import sys
 import errno
-import unittest
 import contextlib
 import argparse
 import json
@@ -38,7 +37,6 @@ from setuptools import find_packages, setup, Extension
 from setuptools.command.bdist_egg import bdist_egg
 from setuptools.command.develop import develop
 from setuptools.command.sdist import sdist
-from setuptools.command.test import test
 
 from hotdoc.utils.setup_utils import (
     VERSION, require_clean_submodules, symlink, pkgconfig)
@@ -250,48 +248,6 @@ class CustomBDistEgg(bdist_egg):
         return bdist_egg.run(self)
 
 
-# From http://stackoverflow.com/a/17004263/2931197
-def discover_and_run_tests(forever):
-    # use the default shared TestLoader instance
-    test_loader = unittest.defaultTestLoader
-
-    # use the basic test runner that outputs to sys.stderr
-    test_runner = unittest.TextTestRunner()
-
-    # automatically discover all tests
-    # NOTE: only works for python 2.7 and later
-    test_suite = test_loader.discover(SOURCE_DIR)
-
-    # run the test suite
-    loop = True
-    while loop:
-        res = test_runner.run(test_suite)
-        if res.errors or res.failures or not forever:
-            loop = False
-
-
-class DiscoverTest(test):
-    user_options = test.user_options + [('forever', None, 'Run until failure')]
-
-    def __init__(self, *args, **kwargs):
-        test.__init__(self, *args, **kwargs)
-        self.test_args = []
-        self.test_suite = True
-        self.forever = False
-
-    def initialize_options(self):
-        test.initialize_options(self)
-        self.forever = False
-
-    def finalize_options(self):
-        test.finalize_options(self)
-        self.test_args = []
-        self.test_suite = True
-
-    def run_tests(self):
-        discover_and_run_tests(self.forever)
-
-
 INSTALL_REQUIRES = [
     'pyyaml>=6',
     'lxml',
@@ -300,7 +256,7 @@ INSTALL_REQUIRES = [
     'wheezy.template',
     'toposort>=1.4',
     'importlib_metadata; python_version<"3.10"',
-    'backports.entry_points_selectable',
+    'backports.entry_points_selectable; python_version<"3.10"',
 ]
 
 # dbus-deviation requires sphinx, which requires python 3.5
@@ -405,7 +361,6 @@ if build_c_extension != 'disabled':
                      'hotdoc/parsers/c_comment_scanner/scanner.h'])]
         INSTALL_REQUIRES += [
             'pkgconfig',
-            'faust-cchardet',
             'networkx>=2.5'
         ]
         PACKAGE_DATA['hotdoc.extensions.gi'] = ['html_templates/*']
@@ -430,7 +385,6 @@ setup(
               'sdist': CustomSDist,
               'bdist_egg': CustomBDistEgg,
               'develop': CustomDevelop,
-              'test': DiscoverTest,
               'build_default_theme': BuildDefaultTheme},
     package_data=PACKAGE_DATA,
     install_requires=INSTALL_REQUIRES,
